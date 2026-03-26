@@ -16,6 +16,9 @@ import Aula13 from "../components/Aula13";
 import Aula14 from "../components/Aula14";
 import { estilos } from "../style/Estilos";
 import { useState } from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faStarAndCrescent } from '@fortawesome/free-solid-svg-icons'
+import { faSun } from "@fortawesome/free-solid-svg-icons";
 
 const Principal = () => {
     const [tema, settema] = useState(false)
@@ -24,6 +27,15 @@ const Principal = () => {
             <Cabecalho aula='React' />
             <main style={estilos.conteudo}>
                 <h2>Aulas</h2>
+                <button onClick={() => settema(!tema)}>
+                    {
+                     
+                     tema == false ? <FontAwesomeIcon icon={faSun} /> : <FontAwesomeIcon icon={faStarAndCrescent} />
+                    }
+                    
+                      {/* tema == false ? {{...estilos.fundo, estilos.cardAula}}  : {{}} */}
+                    
+                    </button>
                 <div style={estilos.lista_aulas}>
                     {/* Aqui incluiremos todos os componentes de Aula */}
                     <Aula01 />
