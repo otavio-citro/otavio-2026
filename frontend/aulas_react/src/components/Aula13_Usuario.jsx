@@ -42,7 +42,8 @@ const estilos = {
         padding: "8px 12px",
         borderRadius: 5,
         marginTop: 10,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        border: 'none'
     },
 
     freteGratis: {

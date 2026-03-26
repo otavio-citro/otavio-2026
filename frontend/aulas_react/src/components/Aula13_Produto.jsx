@@ -8,9 +8,11 @@ const Aula13_Produto = ({ produto, botaoExcluir, botaoAlterar }) => {
             {/* if ternário */}
             {/* { produto.freteGratis == true ? <p>Frete Grátis</p> : null } */}
             { produto.frete == true && <p>Frete Grátis</p> }
-            <a href={produto.link_produto} style={estilos.botao}>Ver Produto</a>
+            <div style={{display:"flex", justifyContent: "center", gap: 10, }}>
             <button style={estilos.botao} onClick={() => botaoExcluir(produto.id_produto)} >Excluir</button>
             <button style={estilos.botao} onClick={() => botaoAlterar(produto)} >Alterar</button>
+            </div>
+            <a href={produto.link_produto} style={estilos.botao}>Ver Produto</a>
         </div>
     )
 }
@@ -20,7 +22,8 @@ const estilos = {
         border: "1px solid #ccc",
         padding: 10,
         width: 250, 
-        textAlign: 'center'
+        textAlign: 'center',
+        
     },
 
     imagem: {
@@ -49,7 +52,8 @@ const estilos = {
         padding: "8px 12px",
         borderRadius: 5,
         marginTop: 10,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        border: "none"
     },
 
     freteGratis: {

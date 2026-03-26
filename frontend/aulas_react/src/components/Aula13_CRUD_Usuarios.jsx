@@ -15,7 +15,7 @@ const Aula13_CRUD_Usuarios = () => {
         }
 
         try {
-            const resposta = await fetch('http://10.130.42.68:3001/usuarios', {
+            const resposta = await fetch('http://localhost:3001/usuarios', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -38,7 +38,7 @@ const Aula13_CRUD_Usuarios = () => {
     async function botaoExcluir(id_usuario) {
 
         try {
-            const resposta = await fetch(`http://10.130.42.68:3001/usuarios/${id_usuario}`, {
+            const resposta = await fetch(`http://localhost:3001/usuarios/${id_usuario}`, {
                 method: 'DELETE'
             })
 
@@ -47,7 +47,6 @@ const Aula13_CRUD_Usuarios = () => {
             }
 
             buscarDados()
-
         } catch (erro) {
             console.error('Erro ao adicionar usuario', erro.message)
         }
@@ -66,7 +65,7 @@ const Aula13_CRUD_Usuarios = () => {
     //Função para buscar os dados de uma API
     async function buscarDados() {
         try {
-            const resposta = await fetch('http://10.130.42.68:3001/usuarios')
+            const resposta = await fetch('http://localhost:3001/usuarios')
             const dados = await resposta.json()
             setListaUsuarios(dados)
 
