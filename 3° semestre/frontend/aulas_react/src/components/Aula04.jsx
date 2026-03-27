@@ -1,10 +1,11 @@
+import { mudarTema } from "../pages/Principal"
 import { estilos } from "../style/Estilos"
 import Aula04_Filmes from "./aula04_Filmes"
 import Aula04_IMC from "./Aula04_IMC"
 
-const Aula04 = () => {
+const Aula04 = ({ tema }) => {
     return (
-        <div style={estilos.cardAula}>
+        <div style={mudarTema(tema).cardAula}>
             <h2>Aula 04 - Props</h2>
             <h3>Criação de componentes reutilizáveis e suas estilizações</h3>
             <hr />

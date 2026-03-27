@@ -1,9 +1,10 @@
+import { mudarTema } from "../pages/Principal"
 import { estilos } from "../style/Estilos"
-import Aula11_CadastroProdutos  from './Aula11_CadastroProdutos'
+import Aula11_CadastroProdutos from './Aula11_CadastroProdutos'
 
-const Aula11 = () => {
+const Aula11 = ({ tema }) => {
     return (
-        <div style={estilos.cardAula}>
+        <div style={mudarTema(tema).cardAula}>
             <h2>Aula 11 - Cadastro de Produtos</h2>
             <h3>Criando uma lista de produtos e armazenando os dados localmente</h3>
             <hr />

@@ -1,24 +1,25 @@
 import { useState, useEffect } from "react"
 import { estilos } from "../style/Estilos"
+import { mudarTema } from "../pages/Principal"
 
-const Aula10 = () => {
+const Aula10 = ({ tema }) => {
     const [contador, setContador] = useState(0)
     //O useEffect fica "monitorando" uma variável e executa
     //a função sempre que ela sofrer uma alteração
     //Esse efeito será executado sempre que o "contador" mudar
-    useEffect( () => {
+    useEffect(() => {
         console.log(contador);
-        document.title = `Contagem: ${contador}` 
-    }, [contador] )
+        document.title = `Contagem: ${contador}`
+    }, [contador])
 
     //o useEffect com [] vazia, significa que o efeito deve ser executado
     //apenas quando a página é carregada
-    useEffect( () => {  
+    useEffect(() => {
         const contadorSalvo = localStorage.getItem('valorContador') || 0;
         setContador(JSON.parse(contadorSalvo))
-    }, [] )
+    }, [])
 
-    function botaoContador () {
+    function botaoContador() {
         const novoContador = contador + 1
         setContador(novoContador)
         //Armazenando localmente nosso contador
@@ -26,7 +27,7 @@ const Aula10 = () => {
     }
 
     return (
-        <div style={estilos.cardAula}>
+        <div style={mudarTema(tema).cardAula}>
             <h2>Aula 10 - useEffect e localStorage</h2>
             <h3>Conhecendo a Hook useEffect e aprendendo a armazenar dados localmente</h3>
             <hr />

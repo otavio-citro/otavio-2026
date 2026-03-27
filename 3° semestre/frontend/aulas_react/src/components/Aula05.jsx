@@ -1,6 +1,7 @@
+import { mudarTema } from "../pages/Principal";
 import { estilos } from "../style/Estilos"
 
-const Aula05 = () => {
+const Aula05 = ({ tema }) => {
     function botaoClique (){
         alert ('Você clicou no botão')
         console.log('Clique no botão')
@@ -24,7 +25,7 @@ const Aula05 = () => {
     }
     
     return (
-        <div style={estilos.cardAula}>
+        <div style={mudarTema(tema).cardAula}>
             <h2>Aula 05 - Eventos de um componente</h2>
             <h3>Os eventos são fundamentais para criar interatividade em 
                     aplicações web 

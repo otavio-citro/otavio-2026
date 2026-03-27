@@ -1,8 +1,10 @@
-const Aula13_Produto = ({ produto, botaoExcluir, botaoAlterar }) => {
+import { mudarTema } from "../pages/Principal";
+
+const Aula13_Produto = ({ produto, botaoExcluir, botaoAlterar, tema }) => {
     return (
         <div style={estilos.cardProduto}>
             <img src={produto.link_imagem} alt="" style={estilos.imagem} />
-            <h2 style={estilos.titulo}>{produto.nome}</h2>
+            <h2 style={mudarTema(tema).titulo}>{produto.nome}</h2>
             <p style={estilos.preco}>R$ {Number(produto.preco).toFixed(2)} </p>
             <p>{produto.categoria}</p>
             {/* if ternário */}
@@ -23,6 +25,7 @@ const estilos = {
         padding: 10,
         width: 250, 
         textAlign: 'center',
+        
         
     },
 

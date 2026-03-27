@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
 import Aula13_Produto from "./Aula13_Produto"
+import { temas } from "../style/Estilos"
 
-const Aula13_CRUD_Produtos = () => {
+const Aula13_CRUD_Produtos = ({tema}) => {
     const [listaProdutos, setListaProdutos] = useState([])
     const [nome, setNome] = useState('')
     const [preco, setPreco] = useState('')
@@ -145,7 +146,7 @@ const Aula13_CRUD_Produtos = () => {
                 <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }} >
                     {
                         listaProdutos.map((produto, pos) => (
-                            <Aula13_Produto key={pos} produto={produto} botaoExcluir={botaoExcluir} botaoAlterar={botaoAlterar} />
+                            <Aula13_Produto key={pos} produto={produto} botaoExcluir={botaoExcluir} botaoAlterar={botaoAlterar} tema={tema} />
                         ))
                     }
                 </div>

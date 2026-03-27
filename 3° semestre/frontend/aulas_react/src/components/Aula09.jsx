@@ -3,8 +3,9 @@ import { estilos } from "../style/Estilos"
 import Aula07_Perfil from "./Aula07_Perfil"
 import Aula09_Numero from "./Aula09_Numero"
 import Aula09_ListaNomes from "./Aula09_ListaNomes"
+import { mudarTema } from "../pages/Principal"
 
-const Aula09 = () => {
+const Aula09 = ({ tema }) => {
   const [numerosSorteados, setNumeroSorteados] = useState([10, 43, 28, 2])
 
   const [listaPerfis, setListaPerfis] = useState([
@@ -23,7 +24,7 @@ const Aula09 = () => {
   }
 
   return (
-    <div style={estilos.cardAula}>
+    <div style={mudarTema(tema).cardAula}>
       <h2>Aula 09 - Listas em React</h2>
       <h3>Exibindo conteúdos dinamicamente com listas</h3>
       <hr />

@@ -2,8 +2,9 @@ import { estilos } from "../style/Estilos"
 import { useState } from "react"
 import Aula06_Contador from "./Aula06_Contador"
 import Aula06_Placar from "./Aula06_Placar"
+import { mudarTema } from "../pages/Principal"
 
-const Aula06 = () => {
+const Aula06 = ( {tema} ) => {
     //Declarando uma variável de estado
     const [ nome, setNome ] = useState('')
     const [ cidade, setCidade ] = useState('')
@@ -18,7 +19,7 @@ const Aula06 = () => {
     }
 
     return (
-        <div style={estilos.cardAula}>
+        <div style={mudarTema(tema).cardAula}>
             <h2>Aula 06 - Estado de um componente</h2>
             <h3>O hook useState adiciona estado a componentes funcionais</h3>
             <hr />

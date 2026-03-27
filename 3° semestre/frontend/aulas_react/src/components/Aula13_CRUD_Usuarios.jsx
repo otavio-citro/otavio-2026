@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import Aula13_Usuario from "./Aula13_Usuario"
 
-const Aula13_CRUD_Usuarios = () => {
+const Aula13_CRUD_Usuarios = ({tema}) => {
     const [listaUsuarios, setListaUsuarios] = useState([])
     const [nome, setNome] = useState('')
     const [email, setEmail] = useState('')
@@ -90,7 +90,7 @@ const Aula13_CRUD_Usuarios = () => {
                 <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }} >
                     {
                         listaUsuarios.map((usuario, pos) => (
-                            <Aula13_Usuario key={pos} usuario={usuario} botaoExcluir={botaoExcluir} />
+                            <Aula13_Usuario key={pos} usuario={usuario} botaoExcluir={botaoExcluir} tema={tema}/>
                         ))
                     }
                 </div>

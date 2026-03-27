@@ -1,8 +1,10 @@
-const Aula13_Usuario = ({ usuario, botaoExcluir }) => {
+import { mudarTema } from "../pages/Principal";
+
+const Aula13_Usuario = ({ usuario, botaoExcluir, tema }) => {
     return (
         <div style={estilos.cardProduto}>
-            <h2 style={estilos.titulo}>{usuario.nome}</h2>
-            <h2 style={estilos.titulo}>{usuario.email}</h2>            
+            <h2 style={mudarTema(tema).titulo}>{usuario.nome}</h2>
+            <h2 style={mudarTema(tema).titulo}>{usuario.email}</h2>            
             <button style={estilos.botao} onClick={() => botaoExcluir(usuario.id_usuario)} >Excluir</button>
         </div>
     )

@@ -72,14 +72,14 @@ router.post('/usuarios', async (req, res) => {
 //recebendo parametro pelo id e buscando o usuario
 router.put('/usuarios/:id_usuario', async (req, res) => {
     //id recebido via parametro
-    const {id_usuario} = req.params;
+    const { id_usuario } = req.params;
     //dados de usuario recebido via corpo da pagina
-    const {nome, email, senha} = req.body
+    const { nome, email, senha } = req.body
     try {
         //verificar se o usuario existe
         const verificarUsuario = await BD.query(`SELECT * FROM usuarios where id_usuario = $1`, [id_usuario]);
-        if(verificarUsuario.rows.length === 0){
-            return res.status(404).json({message: 'Usuario nâo encontrado'})
+        if (verificarUsuario.rows.length === 0) {
+            return res.status(404).json({ message: 'Usuario nâo encontrado' })
         }
         //atualiza todos os campos da tabela(PUT substituição completa)
         const comando = `UPDATE usuarios SET nome = $1, email = $2, senha = $3 where id_usuario = $4`;
@@ -87,22 +87,22 @@ router.put('/usuarios/:id_usuario', async (req, res) => {
         await BD.query(comando, valores)
 
         return res.status(200).json('usuario atualizado')
-    } catch (error) {  
-         console.error('Erro ao atualizar usuarios', error.message)
+    } catch (error) {
+        console.error('Erro ao atualizar usuarios', error.message)
         return res.status(500).json({ error: 'Erro ao atualizar usuarios' })
     }
 })
 
 
-router.patch('/usuarios/:id_usuario', async(req, res)=> {
-const {id_usuario} = req.params;
-const {nome, email, senha} = req.body
+router.patch('/usuarios/:id_usuario', async (req, res) => {
+    const { id_usuario } = req.params;
+    const { nome, email, senha } = req.body
 
     try {
-         //verificar se o usuario existe
+        //verificar se o usuario existe
         const verificarUsuario = await BD.query(`SELECT * FROM usuarios where id_usuario = $1`, [id_usuario]);
-        if(verificarUsuario.rows.length === 0){
-            return res.status(404).json({message: 'Usuario nâo encontrado'})
+        if (verificarUsuario.rows.length === 0) {
+            return res.status(404).json({ message: 'Usuario nâo encontrado' })
         }
 
         //montar o update dinamicamente(apenas campos enviados)
@@ -127,8 +127,8 @@ const {nome, email, senha} = req.body
         }
 
         //se nenhum campos foi enviado
-        if(campos.length === 0){
-            return res.status(400).json({message: "nenhum campo a atualizar"})
+        if (campos.length === 0) {
+            return res.status(400).json({ message: "nenhum campo a atualizar" })
         }
 
 
@@ -142,56 +142,59 @@ const {nome, email, senha} = req.body
         return res.status(200).json('usuario atualizado com sucesso')
     } catch (error) {
         console.error('erro autualizar usuario', error.message)
-        return res.status(500).json({message: "erro interno no servidor" + error.message})
+        return res.status(500).json({ message: "erro interno no servidor" + error.message })
     }
 
 })
 
-router.delete('/usuarios/:id_usuario', async(req, res)=>{
-    const {id_usuario} = req.params
+router.delete('/usuarios/:id_usuario', async (req, res) => {
+    const { id_usuario } = req.params
     try {
         //executa o comando de delete
         const comando = `delete from usuarios where id_usuario = $1`
         await BD.query(comando, [id_usuario])
-        return res.status(200).json({message: 'usuario removido com sucesso'})
+        return res.status(200).json({ message: 'usuario removido com sucesso' })
     } catch (error) {
         console.error('erro ao deletar usuario', error.message)
-        return res.status(500).json({message: "erro interno no servidor" + error.message})
+        return res.status(500).json({ message: "erro interno no servidor" + error.message })
     }
-   
+
 })
 
-router.post('/login', async(req, res) => {
-    const {email, senha} = req.body
-    
-    if(!email || ! !senha){
-        return res.status(400).json({message: 'campo obrigatorio vago!'})
+router.post('/login', async (req, res) => {
+    const { email, senha } = req.body;
+
+    if (!email || !senha) {
+        return res.status(400).json({ message: 'campo obrigatorio vago!' });
     }
+
     try {
-         const comando = 'SELECT id_usuario, nome, email, senha FROM USUARIOS WHERE email = $1'
-if(resultado.rows.lengt === 0) {
-    return res.statusCode(401).json({message: 'email nao encontrado'})
-}
+        const comando = 'SELECT id_usuario, nome, email, senha FROM usuarios WHERE email = $1';
+        const resultado = await BD.query(comando, [email]);
 
-    const usuario = resultado.rows[0]
+        if (resultado.rows.length === 0) {
+            return res.status(401).json({ message: 'email nao encontrado' });
+        }
 
-    if(usuario.senha !== senha){
+        const usuario = resultado.rows[0];
+
+        if (usuario.senha !== senha) {
+            return res.status(401).json({ message: 'senha incorreta' });
+        }
+
         return res.status(200).json({
-            message: "sucesso",
-            usuario:{
-                id:usuario.id_usuario,
+            message: "login realizado com sucesso",
+            usuario: {
+                id: usuario.id_usuario,
                 nome: usuario.nome,
                 email: usuario.email
             }
-        })
-    }
+        });
 
     } catch (error) {
-     console.error('erro ao deletar usuario', error.message)
-        return res.status(500).json({message: "erro interno no servidor" + error.message})   
+        console.error('erro no login', error.message);
+        return res.status(500).json({ message: "erro interno no servidor" });
     }
-
-
-})
+});
 
 export default router

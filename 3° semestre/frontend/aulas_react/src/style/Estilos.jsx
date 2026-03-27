@@ -88,19 +88,26 @@ export const temas = {
     texto: {
         color: 'black',
         
-     }
+     },
+     titulo: {
+        fontSize: 14,
+        color: "#333",
+        textAlign: "center"
+    },
     },
 
     escuro: {
         fundo: {
-            backgroundColor: '#121212',
+            backgroundColor: '#1d1c1c',
             minHeight: '100vh'
         },
         cardAula: {
             backgroundColor: '#2A2A2A',
             color: 'white',
             padding: 16,
-            borderRadius: 8
+            borderRadius: 8,
+            width: '100%',
+            boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)'
         },
         lista_aulas: {
             display: 'flex',
@@ -144,6 +151,11 @@ export const temas = {
     }, 
     texto: {
         color: 'white'
-     }
+     },
+     titulo: {
+        fontSize: 14,
+        color: "#dcdcdc",
+        textAlign: "center"
+    },
     }
 }

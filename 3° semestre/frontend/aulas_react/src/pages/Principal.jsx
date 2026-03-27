@@ -19,6 +19,7 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStarAndCrescent } from '@fortawesome/free-solid-svg-icons'
 import { faSun } from "@fortawesome/free-solid-svg-icons";
+import Aula15 from "../components/Aula15";
 
 export function mudarTema(tema) {
   return tema ? temas.escuro : temas.claro
@@ -42,8 +43,8 @@ useEffect(() => {
                 <button onClick={() => settema(!tema)} style={mudarTema(tema).botaoTema}>
                     {
 
-                        tema ? <FontAwesomeIcon icon={faStarAndCrescent} /> :<FontAwesomeIcon icon={faSun} />
-
+                        tema ? <FontAwesomeIcon icon={faSun}  /> : <FontAwesomeIcon icon={faStarAndCrescent} />
+                        
                     }
 
                     {/* tema == false ? {{...mudarTema().fundo, mudarTema().cardAula}}  : {{}} */}
@@ -67,6 +68,7 @@ useEffect(() => {
                     <Aula12 tema={tema} />
                     <Aula13 tema={tema} />
                     <Aula14 tema={tema} />
+                    <Aula15 tema={tema} />
                 </div>
             </main>
         </div>

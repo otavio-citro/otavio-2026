@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
 import { estilos } from "../style/Estilos"
+import { mudarTema } from "../pages/Principal"
 
-const Aula12 = () => {
+const Aula12 = ({tema}) => {
     const [imagem, setImagem] = useState("")
 
     const buscarDados = async () => {
@@ -22,11 +23,11 @@ const Aula12 = () => {
     }, [] )
 
     return (
-        <div style={estilos.cardAula}>
+        <div style={mudarTema(tema).cardAula}>
             <h2>Aula 12 - Consumo de APIs</h2>
             <h3>Aprendendo a utilizar APIs em React</h3>
             <hr />
-            <div>
+            <div style={{...mudarTema(tema).cardAula, display: 'flex',justifyContent:'center', flexDirection: 'column', textAlign: 'center', margin: 'auto 0' }}>
                 <p>Imagem de cachorro</p>
                 <img src={imagem} width={300} />
                 <button onClick={buscarDados}>Exibir imagem</button>

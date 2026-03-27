@@ -12,7 +12,8 @@ const Aula07_Perfil = ({foto, nome}) => {
             width: 220,
             boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
             borderRadius: 12,
-            margin: 10
+            margin: 10,
+            
         }}>
             <Avatar foto={ foto } />
             <InfoUsuario nome={nome}  />
@@ -21,7 +22,7 @@ const Aula07_Perfil = ({foto, nome}) => {
     )
 }
 
-export const Avatar = ({ foto}) =>{
+export const Avatar = ({ foto }) =>{
     return (
         <img src={foto} alt="" style={{ width: 100, height: 100, borderRadius:'50%' }} />
     )
