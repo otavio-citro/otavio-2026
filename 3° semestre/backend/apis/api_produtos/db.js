@@ -23,7 +23,7 @@ const testarConexao = async () => {
         cliente.release()
         
     }
-    catch (erro) {
+    catch (error) {
         console.log('erro', error.message);
         
     }

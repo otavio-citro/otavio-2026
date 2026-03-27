@@ -14,44 +14,59 @@ import Aula11 from "../components/Aula11";
 import Aula12 from "../components/Aula12";
 import Aula13 from "../components/Aula13";
 import Aula14 from "../components/Aula14";
-import { estilos } from "../style/Estilos";
-import { useState } from "react";
+import { estilos, temas } from "../style/Estilos";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStarAndCrescent } from '@fortawesome/free-solid-svg-icons'
 import { faSun } from "@fortawesome/free-solid-svg-icons";
 
+export function mudarTema(tema) {
+  return tema ? temas.escuro : temas.claro
+}
 const Principal = () => {
-    const [tema, settema] = useState(false)
+   const [tema, settema] = useState(() => {
+    const temaSalvo = localStorage.getItem("tema")
+    return temaSalvo === "escuro"
+})
+useEffect(() => {
+    localStorage.setItem("tema", tema ? "escuro" : "claro")
+}, [tema])
+    
     return (
-        <div style={estilos.fundo}>
-            <Cabecalho aula='React' />
-            <main style={estilos.conteudo}>
-                <h2>Aulas</h2>
-                <button onClick={() => settema(!tema)}>
+        <div style={mudarTema(tema).fundo}>
+            <Cabecalho aula='React' tema={tema} />
+            <main style={mudarTema(tema).conteudo}>
+                <div style={{display: "flex"}}>
+                <h2 style={mudarTema(tema).texto}>Aulas</h2>
+                    <div style={{display : "flex", width: '100%', justifyContent: 'end', marginBottom: '10px'}}>
+                <button onClick={() => settema(!tema)} style={mudarTema(tema).botaoTema}>
                     {
-                     
-                     tema == false ? <FontAwesomeIcon icon={faSun} /> : <FontAwesomeIcon icon={faStarAndCrescent} />
+
+                        tema ? <FontAwesomeIcon icon={faStarAndCrescent} /> :<FontAwesomeIcon icon={faSun} />
+
                     }
-                    
-                      {/* tema == false ? {{...estilos.fundo, estilos.cardAula}}  : {{}} */}
-                    
-                    </button>
-                <div style={estilos.lista_aulas}>
+
+                    {/* tema == false ? {{...mudarTema().fundo, mudarTema().cardAula}}  : {{}} */}
+
+                </button>
+                    </div>
+                </div>
+                <div style={mudarTema(tema).lista_aulas}>
                     {/* Aqui incluiremos todos os componentes de Aula */}
-                    <Aula01 />
-                    <Aula02 />
-                    <Aula03 />
-                    <Aula04 />
-                    <Aula05 />
-                    <Aula06 />
-                    <Aula07 />
-                    <Aula08 />
-                    <Aula09 />
-                    <Aula10 />
-                    <Aula11 />
-                    <Aula12 />
-                    <Aula13 />
-                    <Aula14 />
+                    <Aula01 tema={tema} />
+                    <Aula02 tema={tema} />
+                    <Aula03 tema={tema} />
+                    <Aula04 tema={tema} />
+                    <Aula05 tema={tema} />
+                    <Aula06 tema={tema} />
+                    <Aula07 tema={tema} />
+                    <Aula08 tema={tema} />
+                    <Aula09 tema={tema} />
+                    <Aula10 tema={tema} />
+                    <Aula11 tema={tema} />
+                    <Aula12 tema={tema} />
+                    <Aula13 tema={tema} />
+                    <Aula14 tema={tema} />
                 </div>
             </main>
         </div>

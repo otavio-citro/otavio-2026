@@ -1,6 +1,9 @@
 import { useState } from 'react'
+import { mudarTema } from '../pages/Principal'
+import { temas, } from '../style/Estilos'
 
-const Aula03_Login = () => {
+
+const Aula03_Login = ({ tema }) => {
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
     const [mensagem, setMensagem] = useState('')
@@ -14,7 +17,7 @@ const Aula03_Login = () => {
     }
 
     return (
-        <div style={estilos.loginConteudo}>
+        <div style={mudarTema(tema).loginConteudo}>
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbde4nriDD9cTH89oI4wefdHBvHXZtappHGA&s" 
                 style={estilos.logo}/>
             <h2>Login</h2>
@@ -28,7 +31,7 @@ const Aula03_Login = () => {
                 <input type="password" placeholder='Digite sua senha' style={estilos.input} 
                     onChange={(event) => setSenha(event.target.value)} value={senha}/>
             </div>
-            <button onClick={botaoEntrar} style={estilos.botao}>Entrar</button>
+            <button onClick={botaoEntrar} style={mudarTema(tema).botao}>Entrar</button>
             <p style={{fontStyle:'bold'}}>{mensagem}</p>
         </div>
     )

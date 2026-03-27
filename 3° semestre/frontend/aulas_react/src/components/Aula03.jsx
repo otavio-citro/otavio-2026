@@ -1,11 +1,13 @@
 //Importando um arquivo CSS tradicional
+import { mudarTema } from '../pages/Principal'
 import '../style/Aula03.css'
-import { estilos } from '../style/Estilos'
+import { estilos, temas } from '../style/Estilos'
 import Aula03_Login from './Aula03_Login'
 
-const Aula03 = () => {
+
+const Aula03 = ({tema}) => {
     return (
-        <div style={estilos.cardAula}>
+        <div style={mudarTema(tema).cardAula}>
             <h2>Aula 03 - Componentes e estilização</h2>
             <h3>Criação de componentes reutilizáveis e suas estilizações</h3>
             <p>Aprendendo a criar e reutilizar componentes e estilizações para melhorar a UI</p>
@@ -23,7 +25,7 @@ const Aula03 = () => {
             <p style={ estilos.descricaoModulo }>CSS modularizado é a forma mais comum para Mobile</p>
 
             <hr />
-            <Aula03_Login />
+            <Aula03_Login  tema={tema}/>
         </div>
     )
 }
