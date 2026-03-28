@@ -1,7 +1,7 @@
 const documentacao = {
   openapi: "3.0.3",
   info: {
-    title: "API Ordem de Serviços",
+    title: "API Finan Control",
     description: "Documentação da API de usuários, categorias, subcategorias e transações",
     version: "1.0.0"
   },
