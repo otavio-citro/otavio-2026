@@ -46,3 +46,6 @@ CREATE TABLE transacoes (
         REFERENCES subcategorias(id_subcategoria)
         ON DELETE SET NULL
 );
+
+-- caso a tabela precise de ativo
+ ALTER TABLE transacoes ADD COLUMN ativo BOOLEAN DEFAULT true;
