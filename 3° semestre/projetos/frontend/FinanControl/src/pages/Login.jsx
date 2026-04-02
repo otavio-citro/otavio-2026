@@ -1,19 +1,31 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { enredecoServidor } from '../Utils'
-import { Link } from 'react-router-dom'
+
 const Login = () => {
     const navigate = useNavigate()
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
     const [mensagem, setMensagem] = useState('')
 
-    const botaoEntrar = async () => {
-        //funçao para nao recarregar a tela
-        event.preventDefault();
-        try {
+    function MouseEntrouLink(event) {
+        event.target.style.textDecoration = 'underline';
+    }
+    function MouseSaiuLink(event) {
+        event.target.style.textDecoration = 'none';
+    }
+    function MouseEntrouBotao(event) {
+        event.target.style.backgroundColor = '#F21A28';
+    }
+    function MouseSaiuBotao(event) {
+        event.target.style.backgroundColor = '#E30613';
+    }
 
-            if (email == '' || senha == '') {
+    const botaoEntrar = async (event) => {
+        event.preventDefault()
+
+        try {
+            if (email === '' || senha === '') {
                 throw new Error('Preencha todos os campos')
             }
 
@@ -21,7 +33,7 @@ const Login = () => {
                 email: email,
                 senha: senha
             }
-            //utilizando autenticação com api do backend
+
             const resposta = await fetch(`${enredecoServidor}/login`, {
                 method: 'POST',
                 headers: {
@@ -29,98 +41,171 @@ const Login = () => {
                 },
                 body: JSON.stringify(login)
             })
+
             const dados = await resposta.json()
+
             if (resposta.ok) {
                 console.log('login bem sucedido', dados)
                 setMensagem('Login bem sucedido')
                 localStorage.setItem('UsuarioLogado', JSON.stringify(dados))
                 navigate('/')
-
             } else {
                 setMensagem('email ou senha incorretos')
-                console.log('erro ao fazer login', dados);
-
+                console.log('erro ao fazer login', dados)
             }
 
         } catch (error) {
-            console.error('Erro ao realizar login', error);
+            console.error('Erro ao realizar login', error)
             setMensagem(error.message)
         }
     }
+
     return (
-        <div /*style={{ backgroundColor: '#f2f2f2', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}*/>
-            <div style={{ display: 'flex', justifyContent: "space-between",}}>
-                <img src="../images/bannerFundoSesi.jpg" alt="Logo" style={estilos.banner} />
-                <div style={{display: 'flex', width: '20%', justifyContent: 'top', justifyItems: 'top'}}>
-                    <div style={estilos.loginConteudo}>
-                        <img src="../images/bannerlogo.png" alt="Logo"
-                            style={estilos.logo} />
-                        <h2>Login</h2>
-                        <div style={estilos.grupoInput}>
-                            <label style={estilos.label} >Email</label>
-                            <input type="text" placeholder='Digite seu email' style={estilos.input}
-                                onChange={(event) => setEmail(event.target.value)} value={email} />
-                        </div>
-                        <div style={estilos.grupoInput}>
-                            <label style={estilos.label}>Senha</label>
-                            <input type="password" placeholder='Digite sua senha' style={estilos.input}
-                                onChange={(event) => setSenha(event.target.value)} value={senha} />
-                        </div>
-                        <button onClick={botaoEntrar} style={estilos.botao}>Entrar</button>
-                        <p style={{ fontStyle: 'bold' }}>{mensagem}</p>
-                        <p>não tem conta? <Link to="/cadastro">Cadastre-se</Link></p>
+        <div style={estilos.container}>
+            <img
+                src="../images/bannerFundoSesi.jpg"
+                alt="Banner SESI SENAI"
+                style={estilos.banner}
+            />
+
+            <div style={estilos.ladoFormulario}>
+                <div style={estilos.loginConteudo}>
+                    <img
+                        src="../images/bannerlogo.png"
+                        alt="Logo"
+                        style={estilos.logo}
+                    />
+
+                    <h2 style={estilos.titulo}>Login</h2>
+
+                    <div style={estilos.grupoInput}>
+                        <label style={estilos.label}>Email</label>
+                        <input
+                            type="text"
+                            placeholder="Digite seu email"
+                            style={estilos.input}
+                            onChange={(event) => setEmail(event.target.value)}
+                            value={email}
+                        />
                     </div>
+
+                    <div style={estilos.grupoInput}>
+                        <label style={estilos.label}>Senha</label>
+                        <input
+                            type="password"
+                            placeholder="Digite sua senha"
+                            style={estilos.input}
+                            onChange={(event) => setSenha(event.target.value)}
+                            value={senha}
+                        />
+                    </div>
+
+                    <button
+                        onClick={botaoEntrar}
+                        style={estilos.botao}
+                        onMouseEnter={MouseEntrouBotao}
+                        onMouseLeave={MouseSaiuBotao}
+                    >
+                        Entrar
+                    </button>
+
+                    <p style={estilos.mensagem}>{mensagem}</p>
+
+                    <p>
+                        Não tem conta?{' '}
+                        <Link to="/cadastro"
+                            style={{ textDecoration: 'none', color: 'red' }}
+                            onMouseEnter={MouseEntrouLink}
+                            onMouseLeave={MouseSaiuLink}
+                        >Cadastre-se</Link>
+                    </p>
                 </div>
             </div>
         </div>
     )
-
-
 }
 
 /** @type {{ [key: string]: import('react').CSSProperties }} */
 const estilos = {
+    container: {
+        display: 'flex',
+        minHeight: '100vh',
+        width: '100%'
+    },
+
+    banner: {
+        width: '70%',
+        height: '100vh',
+        objectFit: 'cover'
+    },
+
+    ladoFormulario: {
+        width: '30%',
+        minHeight: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#f5f5f5'
+    },
+
     loginConteudo: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        width: '300px',
-        // margin: '10px auto',
-        borderRadius: '8px',
-        gap: '5px',
-        justifyContent: 'top',
-        marginTop: '50px',
-
-
+        width: '80%',
+        maxWidth: '350px',
+        padding: '30px',
+        borderRadius: '12px',
+        gap: '12px',
+        backgroundColor: '#ffffff',
+        boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
     },
+
+    titulo: {
+        margin: '5px 0 10px 0'
+    },
+
     logo: {
-        height: '50px'
+        height: '50px',
+        marginBottom: '10px',
+        
     },
+
+    grupoInput: {
+        width: '100%'
+    },
+
     label: {
         display: 'block',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        marginBottom: '5px'
     },
+
     input: {
         width: '100%',
-        padding: '8px',
-        borderRadius: '4px',
-        border: '1px solid #ccc'
+        padding: '10px',
+        borderRadius: '6px',
+        border: '1px solid #ccc',
+        outline: 'none',
+        fontSize: '16px',
+        boxSizing: 'border-box'
     },
+
     botao: {
         width: '100%',
         backgroundColor: '#e30613',
         color: '#fff',
-        padding: '10px',
+        padding: '12px',
         border: 'none',
-        borderRadius: '4px'
+        borderRadius: '6px',
+        cursor: 'pointer',
+        fontSize: '16px',
+        fontWeight: 'bold'
     },
-    grupoInput: {
-        width: '100%'
-    },
-    banner: {
-        width: '70%',
-        height: '100vh',
-        objectFit: 'cover',
+
+    mensagem: {
+        minHeight: '20px',
+        fontWeight: 'bold'
     }
 }
 

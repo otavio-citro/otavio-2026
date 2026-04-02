@@ -435,8 +435,7 @@ const documentacao = {
           data_vencimento: { type: "string" },
           tipo: { type: "string", example: "entrada" },
           id_categoria: { type: "integer" },
-          id_subcategoria: { type: "integer" },
-          ativo: { type: "boolean", example: true }
+          id_subcategoria: { type: "integer" }
         }
       },
       Cadastro_Transacao: {
@@ -446,6 +445,7 @@ const documentacao = {
           valor: { type: "number", example: 100.5 },
           descricao: { type: "string" },
           data_vencimento: { type: "string", example: "2025-01-10" },
+          data_pagamento: { type: "string", example: "2025-01-10" },
           tipo: { type: "string", example: "entrada" },
           id_categoria: { type: "integer" },
           id_subcategoria: { type: "integer" }

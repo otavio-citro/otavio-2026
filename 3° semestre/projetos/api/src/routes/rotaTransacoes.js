@@ -5,7 +5,7 @@ const router = Router()
 router.get('/transacoes', async (req, res) => {
     try {
         //cria uma variavel para enviar o comando sql
-        const query = `SELECT * FROM transacoes WHERE ativo = true ORDER BY id_transacoes`
+        const query = `SELECT * FROM transacoes ORDER BY id_transacoes`
         //cria uma variavel para reveber o retorno no sql
         const transacoes = await BD.query(query);
 
@@ -20,14 +20,14 @@ router.get('/transacoes', async (req, res) => {
 })
 
 router.post('/transacoes', async (req, res) => {
-    const { valor, descricao, data_vencimento, tipo, id_categoria, id_subcategoria } = req.body
+    const { valor, descricao, data_vencimento, tipo, data_pagamento, id_categoria, id_subcategoria } = req.body
 
     console.log(valor);
 
     try {
 
-        const comando = `insert into transacoes(valor, descricao, data_vencimento, tipo, id_categoria, id_subcategoria) values($1, $2, $3, $4, $5, $6)`
-        const valores = [valor, descricao, data_vencimento, tipo, id_categoria, id_subcategoria]
+        const comando = `insert into transacoes(valor, descricao, data_vencimento, data_pagamento, tipo, id_categoria, id_subcategoria) values($1, $2, $3, $4, $5, $6, $7)`
+        const valores = [valor, descricao, data_vencimento, data_pagamento, tipo, id_categoria, id_subcategoria]
 
 
         const resposta = await BD.query(comando, valores)
@@ -46,17 +46,17 @@ router.put('/transacoes/:id_transacoes', async (req, res) => {
     //id recebido via parametro
     const { id_transacoes } = req.params;
     //dados de transacao recebido via corpo da pagina
-    const { valor, descricao, data_vencimento, tipo, id_categoria, id_subcategoria } = req.body
+    const { valor, descricao, data_vencimento, data_pagamento, tipo, id_categoria, id_subcategoria } = req.body
     try {
-        
+
         //verificar se a transacao existe
-        const verificartransacao = await BD.query(`SELECT * FROM transacoes where id_transacoes = $1 and ativo = true`, [id_transacoes]);
+        const verificartransacao = await BD.query(`SELECT * FROM transacoes where id_transacoes = $1`, [id_transacoes]);
         if (verificartransacao.rows.length === 0) {
             return res.status(404).json({ message: 'transacao não encontrada' })
         }
 
-        const comando = `UPDATE transacoes SET valor = $1, descricao = $2, data_vencimento = $3, tipo = $4, id_categoria = $5, id_subcategoria = $6 where id_transacoes = $7`;
-        const valores = [valor, descricao, data_vencimento, tipo, id_categoria, id_subcategoria, id_transacoes];
+        const comando = `UPDATE transacoes SET valor = $1, descricao = $2, data_vencimento = $3, data_pagamento = $4, tipo = $5, id_categoria = $6, id_subcategoria = $7 where id_transacoes = $8`;
+        const valores = [valor, descricao, data_vencimento, data_pagamento, tipo, id_categoria, id_subcategoria, id_transacoes];
         await BD.query(comando, valores)
 
         return res.status(200).json('transacao atualizada')
@@ -70,7 +70,7 @@ router.delete('/transacoes/:id_transacoes', async (req, res) => {
     const { id_transacoes } = req.params
     try {
         //executa o comando de delete
-        const comando = `update transacoes set ativo = false where id_transacoes = $1`
+        const comando = `delete from transacoes where id_transacoes = $1`
         await BD.query(comando, [id_transacoes])
         return res.status(200).json({ message: 'transacao removida com sucesso' })
     } catch (error) {

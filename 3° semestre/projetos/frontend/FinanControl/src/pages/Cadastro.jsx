@@ -1,17 +1,32 @@
 import { useEffect, useState } from "react"
 import { enredecoServidor } from "../Utils"
-import { Navigate, useNavigate } from "react-router-dom"
-const Cadastro = ({ tema }) => {
+import { useNavigate, Link } from "react-router-dom"
+
+const Cadastro = () => {
     const [listaUsuarios, setListaUsuarios] = useState([])
     const [nome, setNome] = useState('')
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
     const navigate = useNavigate()
+
+     function MouseEntrouLink(event) {
+        event.target.style.textDecoration = 'underline';
+    }
+    function MouseSaiuLink(event) {
+        event.target.style.textDecoration = 'none';
+    }
+     function MouseEntrouBotao(event) {
+        event.target.style.backgroundColor = '#F21A28';
+    }
+    function MouseSaiuBotao(event) {
+        event.target.style.backgroundColor = '#E30613';
+    }
+
     async function botaoAdicionar() {
         const novoUsuario = {
-            nome: nome,
-            email: email,
-            senha: senha,
+            nome,
+            email,
+            senha
         }
 
         try {
@@ -23,39 +38,20 @@ const Cadastro = ({ tema }) => {
                 body: JSON.stringify(novoUsuario)
             })
 
-
             if (!resposta.ok) {
-                throw new Error('Erro ao adicionar usuários: ' + resposta.statusText)
+                throw new Error('Erro ao adicionar usuários')
             }
-            if (resposta.ok) {
-                console.log('usuario cadastrado com sucesso')
-                navigate('/')
-            }            
+
+            navigate('/login')
             buscarDados()
-            LimparCamposFormularios()
+            limparCampos()
+
         } catch (erro) {
-            console.error('Erro ao adicionar produto', erro.message)
+            console.error('Erro ao adicionar usuário', erro.message)
         }
     }
 
-    // async function botaoExcluir(id_usuario) {
-
-    //     try {
-    //         const resposta = await fetch(`${enredecoServidor}/usuarios/${id_usuario}`, {
-    //             method: 'DELETE'
-    //         })
-
-    //         if (!resposta.ok) {
-    //             throw new Error('Erro ao excluir usuario: ' + resposta.statusText)
-    //         }
-
-    //         buscarDados()
-    //     } catch (erro) {
-    //         console.error('Erro ao adicionar usuario', erro.message)
-    //     }
-    // }
-
-    function LimparCamposFormularios() {
+    function limparCampos() {
         setNome('')
         setEmail('')
         setSenha('')
@@ -65,7 +61,6 @@ const Cadastro = ({ tema }) => {
         buscarDados()
     }, [])
 
-    //Função para buscar os dados de uma API
     async function buscarDados() {
         try {
             const resposta = await fetch(`${enredecoServidor}/usuarios`)
@@ -78,26 +73,79 @@ const Cadastro = ({ tema }) => {
     }
 
     return (
-        <div style={{ backgroundColor: '#f2f2f2', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <div style={estilos.cadastroConteudo}>
-                <h1>Cadastro</h1>
-                <div style={{ display: "flex", flexDirection: 'column', gap: 10, }}>
-                    <input type="text" placeholder="Nome" style={estilos.input} value={nome}
-                        onChange={(event) => setNome(event.target.value)} />
-                    <input type="email" placeholder="Email" style={estilos.input} value={email}
-                        onChange={(event) => setEmail(event.target.value)} />
-                    <input type="password" placeholder="Senha " style={estilos.input} value={senha}
-                        onChange={(event) => setSenha(event.target.value)} />
-                    <button style={estilos.botao} onClick={botaoAdicionar}>Cadastrar</button>
+        <div style={estilos.container}>
+            <img
+                src="../images/bannerFundoSesi.jpg"
+                alt="Banner SESI SENAI"
+                style={estilos.banner}
+            />
 
-                    {/* <hr /> */}
-                    {/* <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }} >
-                    {
-                        listaUsuarios.map((usuario, pos) => (
-                            <Aula13_Usuario key={pos} usuario={usuario} botaoExcluir={botaoExcluir} tema={tema}/>
-                        ))
-                    }
-                </div> */}
+            <div style={estilos.ladoFormulario}>
+                <div style={estilos.loginConteudo}>
+                    <img
+                        src="../images/bannerlogo.png"
+                        alt="Logo"
+                        style={estilos.logo}
+                    />
+
+                    <h2 style={estilos.titulo}>Cadastro</h2>
+
+                    <div style={estilos.grupoInput}>
+                        <label>Nome</label>
+                        <input
+                            type="text"
+                            placeholder="Digite seu nome"
+                            style={estilos.input}
+                            value={nome}
+                            onChange={(event) =>
+                                setNome(event.target.value)
+                            }
+                        />
+                    </div>
+
+                    <div style={estilos.grupoInput}>
+                        <label>Email</label>
+                        <input
+                            type="Email"
+                            placeholder="Digite seu email"
+                            style={estilos.input}
+                            value={email}
+                            onChange={(event) =>
+                                setEmail(event.target.value)
+                            }
+                        />
+                    </div>
+
+                    <div style={estilos.grupoInput}>
+                        <label >Senha</label>
+                        <input
+                            type="password"
+                            placeholder="Digite sua senha"
+                            style={estilos.input}
+                            value={senha}
+                            onChange={(event) =>
+                                setSenha(event.target.value)
+                            }
+                        />
+                    </div>
+
+                    <button
+                        style={estilos.botao}
+                        onClick={botaoAdicionar}
+                        onMouseEnter={MouseEntrouBotao}
+                        onMouseLeave={MouseSaiuBotao}
+                    >
+                        Cadastrar
+                    </button>
+
+                    <p>
+                        já tem conta?{' '}
+                        <Link to="/login"
+                        style={{textDecoration: 'none', color: 'red' }}
+                        onMouseEnter={MouseEntrouLink}
+                        onMouseLeave={MouseSaiuLink}
+                        >Entrar</Link>
+                    </p>
                 </div>
             </div>
         </div>
@@ -105,39 +153,74 @@ const Cadastro = ({ tema }) => {
 }
 
 const estilos = {
-    cadastro: {
-        display: "flex",
-        flexDirection: "column",
-        gap: "10px",
+    container: {
+        display: 'flex',
+        minHeight: '100vh',
+        width: '100%'
     },
-   input: {
-        width: '100%',
-        padding: '8px',
-        borderRadius: '4px',
-        border: '1px solid #ccc'
+
+    banner: {
+        width: '70%',
+        height: '100vh',
+        objectFit: 'cover'
     },
-    botao: {
-        backgroundColor: "#e30613",
-        color: "#fff",
-        borderRadius: "5px",
-        fontWeight: "bold",
-        border: "none",
-        padding: "10px",
-        fontSize: "16px",
-        textAling: "center",
+
+    ladoFormulario: {
+        width: '30%',
+        minHeight: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#f5f5f5'
     },
-    cadastroConteudo: {
+
+    loginConteudo: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        width: '300px',
-        margin: '10px auto',
-        backgroundColor: '#fff',
-        padding: '20px',
-        boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.2)',
-        borderRadius: '8px',
-        gap: '5px'
+        width: '80%',
+        maxWidth: '350px',
+        padding: '30px',
+        borderRadius: '12px',
+        gap: '12px',
+        backgroundColor: '#ffffff',
+        boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
     },
+
+    titulo: {
+        margin: '5px 0 10px 0'
+    },
+
+    logo: {
+        height: '50px',
+        marginBottom: '10px'
+    },
+
+    grupoInput: {
+        width: '100%'
+    },
+
+    input: {
+        width: '100%',
+        padding: '10px',
+        borderRadius: '6px',
+        border: '1px solid #ccc',
+        outline: 'none',
+        fontSize: '16px',
+        boxSizing: 'border-box'
+    },
+
+    botao: {
+        width: '100%',
+        backgroundColor: '#e30613',
+        color: '#fff',
+        padding: '12px',
+        border: 'none',
+        borderRadius: '6px',
+        cursor: 'pointer',
+        fontSize: '16px',
+        fontWeight: 'bold'
+    }
 }
 
 export default Cadastro
