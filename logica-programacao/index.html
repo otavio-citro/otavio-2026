@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treinador de Lógica - Escreva Código Real</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Courier New', monospace; background: #0d1117; color: #c9d1d9; min-height: 100vh; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; height: 100vh; display: flex; flex-direction: column; }
+        header { background: #21262d; padding: 20px; text-align: center; border-bottom: 1px solid #30363d; }
+        header h1 { font-size: 2em; color: #58a6ff; }
+        .top-bar { display: flex; gap: 10px; padding: 10px 20px; background: #161b22; border-bottom: 1px solid #30363d; }
+        button { padding: 8px 16px; background: #238636; color: white; border: none; border-radius: 6px; cursor: pointer; font-family: inherit; transition: background 0.2s; }
+        button:hover { background: #2ea043; }
+        button:disabled { background: #484f58; cursor: not-allowed; }
+        button.active { background: #1f6feb; }
+        #editor { flex: 1; display: flex; }
+        #code-editor { flex: 1; background: #0d1117; border: none; padding: 20px; font-size: 14px; line-height: 1.5; resize: none; outline: none; color: #c9d1d9; }
+        #output { width: 400px; background: #161b22; border-left: 1px solid #30363d; padding: 20px; overflow-y: auto; font-family: monospace; font-size: 14px; }
+        #output pre { white-space: pre-wrap; }
+        .console { background: #0d1117; padding: 10px; border-radius: 4px; margin-top: 10px; max-height: 200px; overflow-y: auto; }
+        .tests { margin-top: 20px; }
+        .test { padding: 8px; margin: 5px 0; border-radius: 4px; font-size: 12px; }
+        .test.pass { background: #238636; color: white; }
+        .test.fail { background: #da3633; color: white; }
+        .score { position: fixed; top: 10px; right: 10px; background: #21262d; padding: 10px 15px; border-radius: 6px; border: 1px solid #30363d; }
+        .reset-btn { background: #da3633; }
+        .reset-btn:hover { background: #f85149; }
+        @media (max-width: 768px) { .top-bar { flex-direction: column; } #editor { flex-direction: column; } #output { width: auto; height: 300px; border-left: none; border-top: 1px solid #30363d; } }
+        .template { color: #8b949e; font-style: italic; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💻 Treinador de Lógica com Código Real (JavaScript)</h1>
+            <p>Escreva código JS para resolver desafios. Testes automáticos verificam sua lógica!</p>
+        </header>
+        <div class="top-bar">
+            <button onclick="loadExercise(0)" class="active" id="btn-0">1. Soma</button>
+            <button onclick="loadExercise(1)" id="btn-1">2. Maior</button>
+            <button onclick="loadExercise(2)" id="btn-2">3. Par</button>
+            <button onclick="loadExercise(3)" id="btn-3">4. Fatorial</button>
+            <button onclick="loadExercise(4)" id="btn-4">5. Array Soma</button>
+            <button onclick="loadExercise(5)" id="btn-5">6. Primo</button>
+            <button onclick="runCode()">▶️ Executar & Testar</button>
+            <button class="reset-btn" onclick="resetProgress()">🔄 Reset</button>
+        </div>
+        <div id="editor">
+            <textarea id="code-editor" placeholder="Escreva seu código JavaScript aqui..."></textarea>
+            <div id="output">
+                <h3>📊 Resultados</h3>
+                <div id="tests"></div>
+                <div class="console" id="console"></div>
+            </div>
+        </div>
+        <div class="score">
+            Progresso: <span id="score">0</span>/60 pts
+        </div>
+    </div>
+
+    <script>
+        const exercises = [
+            {
+                title: "Soma de dois números",
+                desc: "Escreva função soma(a, b) que retorna a + b.",
+                template: "function soma(a, b) {\n  // sua lógica aqui\n  return ;\n}",
+                tests: [
+                    { input: [2, 3], expected: 5, desc: "2+3=5" },
+                    { input: [10, -2], expected: 8, desc: "10 + (-2)=8" }
+                ],
+                points: 10,
+                solved: localStorage.getItem('ex0-solved') === 'true'
+            },
+            {
+                title: "Maior de três números",
+                desc: "Função maior(a, b, c) retorna o maior.",
+                template: "function maior(a, b, c) {\n  // sua lógica aqui\n}",
+                tests: [
+                    { input: [1, 5, 3], expected: 5 },
+                    { input: [-1, -5, 0], expected: 0 }
+                ],
+                points: 10,
+                solved: localStorage.getItem('ex1-solved') === 'true'
+            },
+            {
+                title: "Par ou Ímpar",
+                desc: "Função par(n) retorna true se par.",
+                template: "function par(n) {\n  // sua lógica aqui\n  return ;\n}",
+                tests: [
+                    { input: [4], expected: true },
+                    { input: [7], expected: false }
+                ],
+                points: 10,
+                solved: localStorage.getItem('ex2-solved') === 'true'
+            },
+            {
+                title: "Fatorial (n <= 10)",
+                desc: "Função fatorial(n) para n! (loop).",
+                template: "function fatorial(n) {\n  // use loop\n  let res = 1;\n  // sua lógica\n  return res;\n}",
+                tests: [
+                    { input: [0], expected: 1 },
+                    { input: [5], expected: 120 }
+                ],
+                points: 10,
+                solved: localStorage.getItem('ex3-solved') === 'true'
+            },
+            {
+                title: "Soma de Array",
+                desc: "Função somaArray(arr) soma todos elementos.",
+                template: "function somaArray(arr) {\n  // use loop\n  let soma = 0;\n  // sua lógica\n  return soma;\n}",
+                tests: [
+                    { input: [[1,2,3]], expected: 6 },
+                    { input: [[10]], expected: 10 }
+                ],
+                points: 10,
+                solved: localStorage.getItem('ex4-solved') === 'true'
+            },
+            {
+                title: "É Primo?",
+                desc: "Função primo(n) retorna true se primo (n > 1).",
+                template: "function primo(n) {\n  // teste divisores de 2 a sqrt(n)\n  // sua lógica\n}",
+                tests: [
+                    { input: [13], expected: true },
+                    { input: [15], expected: false }
+                ],
+                points: 10,
+                solved: localStorage.getItem('ex5-solved') === 'true'
+            }
+        ];
+
+        let currentEx = 0;
+        let totalPoints = 0;
+        let score = parseInt(localStorage.getItem('logicScore') || '0');
+
+        function init() {
+            exercises.forEach((ex, i) => {
+                if (ex.solved) totalPoints += ex.points;
+                document.getElementById(`btn-${i}`).classList.toggle('active', i === 0);
+                if (ex.solved) document.getElementById(`btn-${i}`).style.background = '#238636';
+            });
+            loadExercise(0);
+            updateScore();
+        }
+
+        function loadExercise(index) {
+            currentEx = index;
+            document.querySelectorAll('#top-bar button:not(.reset-btn)').forEach((btn, i) => btn.classList.toggle('active', i === index));
+            const ex = exercises[index];
+            document.getElementById('code-editor').value = ex.solved ? ex.solution || ex.template : ex.template;
+            document.getElementById('output').querySelector('h3').textContent = `Desafio: ${ex.title}`;
+            showTests(false);
+            printConsole(`📝 Desafio: ${ex.desc}\n💡 Testes automáticos rodarão ao clicar Executar.\n\n`, 'info');
+        }
+
+        function runCode() {
+            const code = document.getElementById('code-editor').value;
+            const consoleDiv = document.getElementById('console');
+            const testsDiv = document.getElementById('tests');
+            consoleDiv.innerHTML = '';
+            testsDiv.innerHTML = '';
+
+            try {
+                // Criar função anônima para capturar console.log
+                const func = new Function('return ' + code)();
+                const ex = exercises[currentEx];
+                let passed = 0;
+
+                ex.tests.forEach((test, i) => {
+                    try {
+                        const result = func(...test.input);
+                        const isPass = result === test.expected;
+                        if (isPass) passed++;
+                        addTest(test.desc || `Teste ${i+1}`, isPass, result, test.expected);
+                    } catch (e) {
+                        addTest(`Teste ${i+1}`, false, 'Erro: ' + e.message);
+                    }
+                });
+
+                const allPassed = passed === ex.tests.length;
+                if (allPassed && !ex.solved) {
+                    ex.solved = true;
+                    score += ex.points;
+                    ex.solution = code;
+                    localStorage.setItem('logicScore', score);
+                    localStorage.setItem(`ex${currentEx}-solved`, 'true');
+                    document.getElementById(`btn-${currentEx}`).style.background = '#238636';
+                    printConsole(`🎉 PARABÉNS! +${ex.points} pts. Lógica correta!`, 'success');
+                    totalPoints += ex.points;
+                    updateScore();
+                } else if (allPassed) {
+                    printConsole('✅ Código correto! Treine outros desafios.', 'success');
+                } else {
+                    printConsole('❌ Alguns testes falharam. Corrija a lógica!', 'error');
+                }
+                showTests(true);
+            } catch (e) {
+                printConsole('Erro no código: ' + e.message, 'error');
+            }
+        }
+
+        function addTest(desc, pass, got, expected) {
+            const div = document.createElement('div');
+            div.className = `test ${pass ? 'pass' : 'fail'}`;
+            div.innerHTML = `${pass ? '✅' : '❌'} ${desc}<br>${pass ? '' : `Obtido: ${got} | Esperado: ${expected}`}`;
+            document.getElementById('tests').appendChild(div);
+        }
+
+        function showTests(show) {
+            document.getElementById('tests').style.display = show ? 'block' : 'none';
+        }
+
+        function printConsole(msg, type = '') {
+            const pre = document.createElement('pre');
+            pre.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            pre.style.color = type === 'error' ? '#f85149' : type === 'success' ? '#238636' : '#7c3aed';
+            document.getElementById('console').appendChild(pre);
+            document.getElementById('console').scrollTop = document.getElementById('console').scrollHeight;
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+        }
+
+        function resetProgress() {
+            if (confirm('Resetar progresso?')) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        // Auto-run Ctrl+Enter
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') runCode();
+        });
+
+        init();
+    </script>
+</body>
+</html>

@@ -301,6 +301,7 @@ const documentacao = {
         }
       }
     },
+    
     "/transacoes/{id_transacoes}": {
       put: {
         tags: ["Transações"],
@@ -341,7 +342,91 @@ const documentacao = {
           200: { description: "Removida" }
         }
       }
-    }
+    },
+    "/transacoes/tipo/{tipo}": {
+      get: {
+        tags: ["Transações"],
+        summary: "Listar transações",
+        parameters: [
+          {
+            name: "tipo",
+            in: "path",
+            required: true,
+            description: "tipo transação(entra / saida)",
+            schema: {type: 'string', enum:["entrada", "saida"], example: "saida"}
+          }
+        ],
+        responses: {
+          200: {
+            description: "Lista de transações",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "array",
+                  items: { $ref: "#/components/schemas/Transacao" }
+                }
+              }
+            }
+          }
+        }
+      },
+    },
+    "/transacoes/categoria/{id_categoria}": {
+      get: {
+        tags: ["Transações"],
+        summary: "Listar transações",
+        parameters: [
+          {
+            name: "id_categoria",
+            in: "path",
+            required: true,
+            description: "categoria transação",
+            schema: {type: 'integer', example: 1}
+          }
+        ],
+        responses: {
+          200: {
+            description: "Lista de transações",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "array",
+                  items: { $ref: "#/components/schemas/Transacao" }
+                }
+              }
+            }
+          }
+        }
+      },
+    },
+    "/transacoes/subcategoria/{id_subcategoria}": {
+      get: {
+        tags: ["Transações"],
+        summary: "Listar transações",
+        parameters: [
+          {
+            name: "id_subcategoria",
+            in: "path",
+            required: true,
+            description: "SubCategoria transação",
+            schema: {type: 'integer', example: 1}
+          }
+        ],
+        responses: {
+          200: {
+            description: "Lista de transações",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "array",
+                  items: { $ref: "#/components/schemas/Transacao" }
+                }
+              }
+            }
+          }
+        }
+      },
+    },
   },
   components: {
     schemas: {
@@ -433,7 +518,7 @@ const documentacao = {
           data_registro: { type: "string", example: "2025-01-01 10:00:00" },
           data_pagamento: { type: "string" },
           data_vencimento: { type: "string" },
-          tipo: { type: "string", example: "entrada" },
+          tipo: { type: "string", enum:['entrada', 'saida'] ,example: "entrada" },
           id_categoria: { type: "integer" },
           id_subcategoria: { type: "integer" }
         }
