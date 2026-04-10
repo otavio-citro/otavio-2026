@@ -427,6 +427,41 @@ const documentacao = {
         }
       },
     },
+    "/transacoes/periodo":{
+      get: {
+        tags: ["Transações"],
+        summary: "Listar transações por periodo",
+        parameters: [
+          {
+            name: "inicio",
+            in: "query",
+            required: true,
+            description: "data de inicio do periodo",
+            schema: {type: 'string', example: "10/04/2026"}
+          },
+          {
+            name: "fim",
+            in: "query",
+            required: true,
+            description: "data fim do periodo",
+            schema: {type: 'string', example: "13/04/2026"}
+          }
+        ],
+        responses: {
+          200: {
+            description: "Lista de transações",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "array",
+                  items: { $ref: "#/components/schemas/Transacao" }
+                }
+              }
+            }
+          }
+        }
+      },
+    }
   },
   components: {
     schemas: {
