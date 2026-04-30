@@ -1,9 +1,11 @@
 import express, { Router } from 'express'
 import { BD } from '../../db.js'
 import bcrypt from 'bcrypt'
+import { autenticarToken } from '../middlewares/autenticacao.js'
+import jwt from 'jsonwebtoken'
 const router = Router()
-
-router.get('/usuarios', async (req, res) => {
+const SECRET_KEY = 'sua_chave_secreta'
+router.get('/usuarios', autenticarToken, async (req, res) => {
     try {
         //cria uma variavel para enviar o comando sql
         const query = `SELECT * FROM usuarios where ativo = true ORDER BY id_usuario`
@@ -46,19 +48,19 @@ router.post('/usuarios', async (req, res) => {
 
 })
 
-router.put('/usuarios/:id_usuario', async (req, res) => {
+router.put('/usuarios/:id_usuario', autenticarToken, async (req, res) => {
     //id recebido via parametro
     const { id_usuario } = req.params;
     //dados de usuario recebido via corpo da pagina
     const { nome, email, senha, tipo_acesso } = req.body
     try {
-        
+
         //verificar se o usuario existe
         const verificarUsuario = await BD.query(`SELECT * FROM usuarios where id_usuario = $1 and ativo = true`, [id_usuario]);
         if (verificarUsuario.rows.length === 0) {
             return res.status(404).json({ message: 'Usuario nâo encontrado' })
         }
-         const saltRounds = 10;
+        const saltRounds = 10;
         //gerando a hash da senha
         const senhaCriptografada = await bcrypt.hash(senha, saltRounds)
         //atualiza todos os campos da tabela(PUT substituição completa)
@@ -73,7 +75,7 @@ router.put('/usuarios/:id_usuario', async (req, res) => {
     }
 })
 
-router.delete('/usuarios/:id_usuario', async (req, res) => {
+router.delete('/usuarios/:id_usuario', autenticarToken, async (req, res) => {
     const { id_usuario } = req.params
     try {
         //executa o comando de delete
@@ -108,8 +110,17 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'senha incorreta' });
         }
 
+        //gerando token para retornar e ser usado
+        const token = jwt.sign(
+            { id_usuario: usuario.id_usuario, email: usuario.email },
+            SECRET_KEY,
+            //{expires: '15m'} //tempo para expirar o token
+        )
+
+
         return res.status(200).json({
             message: "login realizado com sucesso",
+            token: token,
             usuario: {
                 id: usuario.id_usuario,
                 nome: usuario.nome,

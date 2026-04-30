@@ -1,8 +1,10 @@
 import express, { Router } from 'express'
 import { BD } from '../../db.js'
+import { autenticarToken } from '../middlewares/autenticacao.js'
+import jwt from 'jsonwebtoken'
 const router = Router()
 
-router.get('/categorias', async (req, res) => {
+router.get('/categorias', autenticarToken, async (req, res) => {
     try {
         //cria uma variavel para enviar o comando sql
         const query = `SELECT * FROM categorias where ativo = true ORDER BY id_categoria`
@@ -19,7 +21,7 @@ router.get('/categorias', async (req, res) => {
     }
 })
 
-router.post('/categorias', async (req, res) => {
+router.post('/categorias', autenticarToken, async (req, res) => {
     const { nome, descricao, tipo, cor, icone } = req.body
 
     console.log(nome);
@@ -41,7 +43,7 @@ router.post('/categorias', async (req, res) => {
 
 })
 
-router.put('/categorias/:id_categoria', async (req, res) => {
+router.put('/categorias/:id_categoria', autenticarToken, async (req, res) => {
     //id recebido via parametro
     const { id_categoria } = req.params;
     //dados de categoria recebido via corpo da pagina
@@ -65,7 +67,7 @@ router.put('/categorias/:id_categoria', async (req, res) => {
     }
 })
 
-router.delete('/categorias/:id_categoria', async (req, res) => {
+router.delete('/categorias/:id_categoria', autenticarToken, async (req, res) => {
     const { id_categoria } = req.params
     try {
         //executa o comando de delete

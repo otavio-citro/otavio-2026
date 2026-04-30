@@ -1,8 +1,10 @@
 import express, { Router } from 'express'
 import { BD } from '../../db.js'
+import { autenticarToken } from '../middlewares/autenticacao.js'
+import jwt from 'jsonwebtoken'
 const router = Router()
 
-router.get('/transacoes', async (req, res) => {
+router.get('/transacoes', autenticarToken, async (req, res) => {
     try {
         //cria uma variavel para enviar o comando sql
         const query = `SELECT 
@@ -35,7 +37,7 @@ router.get('/transacoes', async (req, res) => {
     }
 })
 
-router.post('/transacoes', async (req, res) => {
+router.post('/transacoes', autenticarToken, async (req, res) => {
     const { valor, descricao, data_vencimento, tipo, data_pagamento, id_categoria, id_subcategoria } = req.body
 
     console.log(valor);
@@ -58,7 +60,7 @@ router.post('/transacoes', async (req, res) => {
 
 })
 
-router.put('/transacoes/:id_transacoes', async (req, res) => {
+router.put('/transacoes/:id_transacoes', autenticarToken, async (req, res) => {
     //id recebido via parametro
     const { id_transacoes } = req.params;
     //dados de transacao recebido via corpo da pagina
@@ -82,7 +84,7 @@ router.put('/transacoes/:id_transacoes', async (req, res) => {
     }
 })
 
-router.delete('/transacoes/:id_transacoes', async (req, res) => {
+router.delete('/transacoes/:id_transacoes', autenticarToken, async (req, res) => {
     const { id_transacoes } = req.params
     try {
         //executa o comando de delete
@@ -96,7 +98,7 @@ router.delete('/transacoes/:id_transacoes', async (req, res) => {
 
 })
 
-router.get('/transacoes/tipo/:tipo', async (req, res) => {
+router.get('/transacoes/tipo/:tipo', autenticarToken, async (req, res) => {
     const { tipo } = req.params
 
     try {
@@ -131,7 +133,7 @@ router.get('/transacoes/tipo/:tipo', async (req, res) => {
     }
 })
 
-router.get('/transacoes/categoria/:id_categoria', async (req, res) => {
+router.get('/transacoes/categoria/:id_categoria', autenticarToken, async (req, res) => {
     const { id_categoria } = req.params
 
     try {
@@ -166,7 +168,7 @@ router.get('/transacoes/categoria/:id_categoria', async (req, res) => {
     }
 })
 
-router.get('/transacoes/subcategoria/:id_subcategoria', async (req, res) => {
+router.get('/transacoes/subcategoria/:id_subcategoria', autenticarToken, async (req, res) => {
     const { id_subcategoria } = req.params
 
     try {
@@ -201,14 +203,14 @@ router.get('/transacoes/subcategoria/:id_subcategoria', async (req, res) => {
     }
 })
 
-router.get('/transacoes/periodo', async (req, res) => {
+router.get('/transacoes/periodo', autenticarToken, async (req, res) => {
     //requisição apartir de uma query
-    const {inicio, fim} = req.query;
-    
+    const { inicio, fim } = req.query;
+
     try {
 
         if (!inicio || !fim) {
-            return res.status(400).json({message: 'Informe as datas de inicio e fim'})
+            return res.status(400).json({ message: 'Informe as datas de inicio e fim' })
         }
 
 
